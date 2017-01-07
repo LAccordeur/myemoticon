@@ -1,6 +1,7 @@
 package com.emoticon.photo.action;
 
 import com.emoticon.photo.domain.AccessToken;
+import com.emoticon.photo.domain.User;
 import com.emoticon.photo.util.CheckUtil;
 import com.emoticon.photo.util.MessageUtil;
 import com.emoticon.photo.util.WechatUtil;
@@ -66,8 +67,8 @@ public class WechatAction extends HttpServlet{
             } else if (MessageUtil.MESSAGE_IMAGE.equals(msgType)) {
                 String mediaId = map.get("MediaId");
                 AccessToken accessToken = WechatUtil.getAccessToken();
-                WechatUtil.getImageToCould(accessToken.getToken(),mediaId);
-                message = MessageUtil.initText(toUserName,fromUserName,"图片上传成功!");
+                User user = WechatUtil.getImageToCould(accessToken.getToken(),mediaId,fromUserName);
+                message = MessageUtil.initText(toUserName,fromUserName,"图片上传成功! 您的用户名和密码均为" + user.getUsername());
             }
 
             System.out.println(message);

@@ -2,7 +2,9 @@ package com.emoticon.photo.util;
 
 import com.emoticon.photo.domain.AccessToken;
 import com.emoticon.photo.domain.Image;
+import com.emoticon.photo.domain.User;
 import com.emoticon.photo.service.ImageService;
+import com.emoticon.photo.service.UserService;
 import net.sf.json.JSONObject;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -64,24 +66,44 @@ public class WechatUtil {
         return token;
     }
 
-    public static void getImageToCould(String accessToken, String mediaId) throws IOException {
+    /**
+     * 将微信后台中的临时图片上传到七牛云中
+     * @param accessToken,mediaId,username
+     * @return User
+     * @throws IOException
+     */
+    public static User getImageToCould(String accessToken, String mediaId, String username) throws IOException {
         String url = GET_IMAGE_URL.replace("ACCESS_TOKEN",accessToken).replace("MEDIA_ID",mediaId);
 
+        //获取图片资源
         DefaultHttpClient httpClient = new DefaultHttpClient();
         HttpGet httpGet = new HttpGet(url);
         HttpResponse httpResponse = httpClient.execute(httpGet);
         HttpEntity httpEntity = httpResponse.getEntity();
 
+        UserService userService = new UserService();
+        String returnName = username.substring(6,11); //从用户名字密文中截取六位做返回名
+        User user = userService.getUserByUsername(returnName); //检测该微信用户是否已经存在
+
+        if (user == null) {
+            String returnPassword = returnName;
+            user = new User();
+            user.setUsername(returnName);
+            user.setPassword(returnPassword);
+            userService.addUser(user);
+        }
+
         //封装图片信息
         Image image = new Image();
-        image.setUserID("10001"); //10001表示是微信用户上传的
-        image.setName("wechat" + new Random().nextInt());
+        image.setUserID(user.getId() + "");
+        image.setName("wx" + UUID.randomUUID().toString().substring(0,5));
         image.setDate(new Date());
-        image.setUrl("10001/" + UUID.randomUUID());
+        image.setUrl(user.getUsername() + "/" + UUID.randomUUID());
 
         //上传图片至云中
         ImageService imageService = new ImageService();
         imageService.addImage(image,httpEntity.getContent());
 
+        return user;
     }
 }

@@ -33,7 +33,7 @@
     <if test="#{_parameter} != null">and username=#{_parameter}</if>
   </select>
 
-  <insert id="addUser" parameterType="com.emoticon.photo.domain.User">
+  <insert id="addUser" useGeneratedKeys="true" keyProperty="id" parameterType="com.emoticon.photo.domain.User">
     INSERT INTO user
     (
     username,
