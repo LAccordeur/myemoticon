@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+
+       Copyright 2009-2016 the original author or authors.
+
+       Licensed under the Apache License, Version 2.0 (the "License");
+       you may not use this file except in compliance with the License.
+       You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+       Unless required by applicable law or agreed to in writing, software
+       distributed under the License is distributed on an "AS IS" BASIS,
+       WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+       See the License for the specific language governing permissions and
+       limitations under the License.
+
+-->
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.emoticon.photo.dao.ImageMapper">
+
+  <resultMap type="com.emoticon.photo.domain.Image" id="ImageResult">
+    <id column="id" jdbcType="INTEGER" property="id"/>
+    <result column="name" jdbcType="VARCHAR" property="name"/>
+    <result column="url" jdbcType="VARCHAR" property="url"/>
+    <result column="date" jdbcType="DATE" property="date"/>
+    <result column="user_id" jdbcType="INTEGER" property="userID"/>
+  </resultMap>
+
+  <select id="getByUserId" parameterType="int" resultMap="ImageResult">
+    select id, name, url,date,user_id from image where 1=1
+    <if test="#{_parameter} != null">and user_id=#{_parameter}</if>
+    order by date desc
+  </select>
+
+  <insert id="addImage" parameterType="com.emoticon.photo.domain.Image">
+    INSERT INTO image
+    (
+    name,
+    url,
+    date,
+    user_id
+    )
+    VALUES
+    (
+    #{name},
+    #{url},
+    #{date},
+    #{userID}
+    )
+  </insert>
+
+  <delete id="delByIdsAndUrls" parameterType="int">
+    DELETE from image where ID=#{_parameter}
+  </delete>
+
+  <select id="getAllImages" resultMap="ImageResult">
+    select id, name, url,date,user_id from image where 1=1 order by date desc
+  </select>
+
+  <!--<insert id="addUser" parameterType="com.guoyang.photo.domain.User">
+    INSERT INTO user
+    (
+    username,
+    password
+    )
+    VALUES
+    (
+    #{username},
+    #{password}
+    )
+  </insert>-->
+
+  <!--<delete id="deleteOne" parameterType="String">
+    DELETE from message where ID=#{_parameter}
+  </delete>
+
+  <delete id="deleteBatch" parameterType="java.util.List">
+    DELETE FROM message WHERE ID in(
+      <foreach collection="list" item="item" separator=",">
+        #{item}
+      </foreach>
+    )
+  </delete>-->
+  <!--<select id="version" parameterType="long" resultType="int">
+    SELECT version FROM user WHERE id = #{id,jdbcType=INTEGER}
+  </select>
+
+  <delete id="delete" parameterType="UserAlias">
+    DELETE FROM user WHERE id = #{id:INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="UserAlias" useGeneratedKeys="false">
+    INSERT INTO user
+    ( id,
+    username,
+    password,
+    administrator
+    )
+    VALUES
+    ( #{id},
+    #{username,jdbcType=VARCHAR},
+    #{password.encrypted:VARCHAR},
+    #{administrator,jdbcType=BOOLEAN}
+    )
+  </insert>
+
+  <update id="update" parameterType="UserAlias">
+    UPDATE user SET
+    username = #{username,jdbcType=VARCHAR},
+    password = #{password.encrypted,jdbcType=VARCHAR},
+    administrator = #{administrator,jdbcType=BOOLEAN}
+    WHERE
+    id = #{id,jdbcType=INTEGER}
+  </update>
+
+  &lt;!&ndash;   Unique constraint check &ndash;&gt;
+  <select id="isUniqueUsername" parameterType="map" resultType="boolean">
+    SELECT (count(*) = 0)
+    FROM user
+    WHERE ((#{userId,jdbcType=BIGINT} IS NOT NULL AND id != #{userId,jdbcType=BIGINT}) OR #{userId,jdbcType=BIGINT} IS
+    NULL)  &lt;!&ndash; other than me &ndash;&gt;
+    AND (username = #{username,jdbcType=VARCHAR})
+  </select>-->
+</mapper>
