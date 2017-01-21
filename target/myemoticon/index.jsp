@@ -95,7 +95,7 @@
         //点击登录
         $('#login').click(function() {
             //提交登录表单
-            $.post('${pageContext.request.contextPath}' + '/UserAction?type=1',
+            $.post('${pageContext.request.contextPath}' + '/user.action?type=1',
                     {
                         username: $('#username').val(),
                         password: $('#password').val()
@@ -110,7 +110,7 @@
                         } else if (data == '4') {
                             createPopOver('#password', 'right', ' wrong password', 'show');
                         } else if (data == 5) {
-                            location.href = '${pageContext.request.contextPath}' + '/home.jsp';
+                            location.href = '${pageContext.request.contextPath}' + '/pages/home.jsp';
                         }
                     });
         });
@@ -118,7 +118,7 @@
         //点击注册按钮
         $('#register').click(function() {
             //提交注册表单
-            $.post('${pageContext.request.contextPath}' + '/UserAction?type=2',
+            $.post('${pageContext.request.contextPath}' + '/user.action?type=2',
                     {
                         username: $('#reg_username').val(),
                         password: $('#reg_password').val(),

@@ -1,11 +1,10 @@
 package com.emoticon.photo.action;
 
-import com.emoticon.photo.domain.AccessToken;
+import com.emoticon.photo.domain.wechat.AccessToken;
 import com.emoticon.photo.domain.User;
 import com.emoticon.photo.util.CheckUtil;
 import com.emoticon.photo.util.MessageUtil;
 import com.emoticon.photo.util.WechatUtil;
-import org.dom4j.DocumentException;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.MultipartConfig;
@@ -63,7 +62,11 @@ public class WechatAction extends HttpServlet{
             //返回信息
             String message = null;
             if (MessageUtil.MESSAGE_TEXT.equals(msgType)) {
-                message = MessageUtil.initText(toUserName,fromUserName,content);
+
+                String imageIdFromUser = content.substring(5,content.length());
+                System.out.println("imageId " + imageIdFromUser);
+                AccessToken accessToken = WechatUtil.getAccessToken();
+                message = WechatUtil.sendImageToUser(accessToken.getToken(),imageIdFromUser,toUserName,fromUserName);
             } else if (MessageUtil.MESSAGE_IMAGE.equals(msgType)) {
                 String mediaId = map.get("MediaId");
                 AccessToken accessToken = WechatUtil.getAccessToken();
@@ -73,7 +76,7 @@ public class WechatAction extends HttpServlet{
 
             System.out.println(message);
             out.print(message);
-        } catch (DocumentException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         } finally {
             out.close();

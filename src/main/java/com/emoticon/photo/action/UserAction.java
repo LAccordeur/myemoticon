@@ -15,7 +15,7 @@ import java.io.PrintWriter;
 /**
  * Created by L'Accordeur on 2016/12/17.
  */
-@WebServlet(value = "/UserAction")
+@WebServlet(value = "/user.action")
 public class UserAction extends HttpServlet {
     private static final long serialVersionUID = 1L;
 

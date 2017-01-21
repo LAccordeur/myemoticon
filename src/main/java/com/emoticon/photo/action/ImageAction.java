@@ -18,7 +18,7 @@ import java.util.UUID;
 /**
  * Created by L'Accordeur on 2016/12/17.
  */
-@WebServlet(value = "/ImageAction")
+@WebServlet(value = "/image.action")
 @MultipartConfig
 public class ImageAction extends HttpServlet {
     private static final long serialVersionUID = 1L;
@@ -51,7 +51,7 @@ public class ImageAction extends HttpServlet {
             imageService.addImage(img, image.getInputStream());
 
             request.getSession().setAttribute("imageList", imageService.getByUserId(img.getUser().getId()));
-            response.sendRedirect(request.getContextPath() + "/home.jsp");
+            response.sendRedirect(request.getContextPath() + "/pages/home.jsp");
 
         } else if (type == 2) {    //删除图片
 
@@ -64,7 +64,7 @@ public class ImageAction extends HttpServlet {
 
             //获取所有图片用于图片广场展示
             request.getSession().setAttribute("allImages", imageService.getAllImages());
-            response.sendRedirect(request.getContextPath() + "/square.jsp");
+            response.sendRedirect(request.getContextPath() + "/pages/square.jsp");
 
         }
     }

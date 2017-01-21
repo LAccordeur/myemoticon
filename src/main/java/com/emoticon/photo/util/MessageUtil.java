@@ -1,6 +1,8 @@
 package com.emoticon.photo.util;
 
-import com.emoticon.photo.domain.TextMessage;
+import com.emoticon.photo.domain.wechat.TextMessage;
+import com.emoticon.photo.domain.wechat.Image;
+import com.emoticon.photo.domain.wechat.ImageMessage;
 import com.thoughtworks.xstream.XStream;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
@@ -76,5 +78,35 @@ public class MessageUtil {
 		return textMessageToXml(text);
 	}
 
+	/**
+	 * 图片消息转为xml
+	 * @param imageMessage
+	 * @return
+	 */
+	public static String imageMessageToXml(ImageMessage imageMessage){
+		XStream xstream = new XStream();
+		xstream.alias("xml", imageMessage.getClass());
+		return xstream.toXML(imageMessage);
+	}
+
+	/**
+	 * 组装图片消息
+	 * @param toUserName
+	 * @param fromUserName
+	 * @return
+	 */
+	public static String initWechatImageMessage(String toUserName,String fromUserName,String mediaId){
+		String message = null;
+		Image image = new Image();
+		image.setMediaId(mediaId);
+		ImageMessage imageMessage = new ImageMessage();
+		imageMessage.setFromUserName(toUserName);
+		imageMessage.setToUserName(fromUserName);
+		imageMessage.setMsgType(MESSAGE_IMAGE);
+		imageMessage.setCreateTime(new Date().getTime());
+		imageMessage.setImage(image);
+		message = imageMessageToXml(imageMessage);
+		return message;
+	}
 
 }

@@ -3,6 +3,10 @@ package com.emoticon.photo.util;
 import java.security.MessageDigest;
 import java.util.Arrays;
 
+/**
+ * 微信工具类：验证消息的确来自微信
+ *
+ */
 public class CheckUtil {
 	private static final String token = "guoyang";
 	public static boolean checkSignature(String signature,String timestamp,String nonce){

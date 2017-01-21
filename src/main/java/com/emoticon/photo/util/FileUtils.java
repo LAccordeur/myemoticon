@@ -12,7 +12,6 @@ import com.qiniu.util.Auth;
 
 /**
  * 图片工具类（使用七牛云存储服务）
- * @author www.shiyanlou.com
  *
  */
 public class FileUtils {
